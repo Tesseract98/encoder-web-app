@@ -1,29 +1,31 @@
 <template>
   <div id="app">
     <Header/>
-    <Main/>
-    <Footer year="2020"/>
+    <router-view/>
+    <Footer v-bind:year="current_year"/>
   </div>
 </template>
 
 <script>
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
-import Main from './components/Main.vue'
+
 
 export default {
   name: 'App',
+  data() {
+    return {
+      current_year: new Date().getFullYear().toString(),
+    }
+  },
   components: {
     Header,
     Footer,
-    Main
   }
 }
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap');
-
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -32,5 +34,6 @@ export default {
   color: #2c3e50;
 }
 
+@import url('https://fonts.googleapis.com/css?family=Poppins:400,500,700&display=swap');
 @import'~bootstrap/dist/css/bootstrap.css'
 </style>

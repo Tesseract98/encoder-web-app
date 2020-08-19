@@ -1,20 +1,22 @@
 <template> 
 <div id="welcome_div">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img alt="Vue logo" src="@/assets/logo.png">
     <h1>Encoder project</h1>
     <p>web pages</p>
-    <button type="button" class="btn btn-outline-info" @click="register()">На страницу регистрации</button>
+    <router-link to='/register'>
+        <button type="button" class="btn btn-outline-info">На страницу регистрации</button>
+    </router-link>
     <button type="button" class="btn btn-outline-success" @click="login()">На страницу авторизации</button>
 </div>
 </template>
 
 <script>
 export default {
+    beforeCreate: function() {
+        document.body.className = 'main';
+    },
     name: 'Main',
     methods: {
-        register: function() {
-            location.href = '/register'
-        },
         login: function() {
             location.href = '/login'
         }

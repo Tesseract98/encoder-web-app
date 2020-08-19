@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
         <div class="container-fluid">
-            <a href="/cipher" class="navbar-brand"><img src="../assets/lock_secure.png" alt="logo"></a>
+            <router-link to="/cipher" class="navbar-brand"><img src="@/assets/lock_secure.png" alt="logo"></router-link>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponse">
                 <span class="navbar-toggler-icon"></span>
             </button>

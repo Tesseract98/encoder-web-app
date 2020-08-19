@@ -14,7 +14,10 @@
 export default {
     name: 'Footer',
     props: {
-        year: String
+        year: {
+            type: String,
+            required: true
+        }
     }
 }
 </script>
