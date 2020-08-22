@@ -8,10 +8,10 @@
             <div class="collapse navbar-collapse" id="navbarResponse">
                 <ul class="navbar nav ml-auto">
                     <li class="nav-item active">
-                        <a href="/" class="nav-link">Main page</a>
+                        <router-link to="/" class="nav-link">Main page</router-link>
                     </li>
                     <li class="nav-item">
-                        <a href="/cipher" class="nav-link">Cipher</a>
+                        <router-link to="/cipher" class="nav-link">Cipher</router-link>
                     </li>
                     <li class="nav-item">
                         <form action="/logout" method="post">
