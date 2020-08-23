@@ -16,6 +16,8 @@
 
     <modules>
         <module>webServer</module>
+        <module>cypher-service</module>
+        <module>crypto-algorithms</module>
     </modules>
 
 </project>
