@@ -13,8 +13,9 @@ import java.util.UUID;
 
 public class LSBMethod {
 
-    private final int AMOUNT_OF_ZEROS = 21;
     private final int UNICODE_SEQUENCE_BIT = 16;
+
+    private final int AMOUNT_OF_ZEROS = UNICODE_SEQUENCE_BIT + 5;
 
     private static final LSBMethod lsbMethod = new LSBMethod();
 

@@ -1,0 +1,43 @@
+package com.algorithms.compression.haffmancode;
+
+class Node implements Comparable<Node> {
+
+    private char letter;
+    private final int numberOfOccurrences;
+
+    private Node left;
+    private Node right;
+
+    public Node(char letter, int amount) {
+        this.letter = letter;
+        numberOfOccurrences = amount;
+    }
+
+    public Node(Node left, Node right) {
+        this.left = left;
+        this.right = right;
+        numberOfOccurrences = left.getNumberOfOccurrences() + right.getNumberOfOccurrences();
+    }
+
+    public Character getLetter() {
+        return letter;
+    }
+
+    public int getNumberOfOccurrences() {
+        return numberOfOccurrences;
+    }
+
+    public Node getLeft() {
+        return left;
+    }
+
+    public Node getRight() {
+        return right;
+    }
+
+    @Override
+    public int compareTo(Node nextNode) {
+        return this.numberOfOccurrences > nextNode.getNumberOfOccurrences() ? 1 : -1;
+    }
+
+}
