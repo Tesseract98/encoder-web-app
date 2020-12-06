@@ -2,7 +2,9 @@ package com.algorithms.compression.haffmancode;
 
 class Node implements Comparable<Node> {
 
-    private char letter;
+    public static final char INITIAL_CHARACTER = 'ৠ';
+
+    private char letter = INITIAL_CHARACTER;
     private final int numberOfOccurrences;
 
     private Node left;

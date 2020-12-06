@@ -1,12 +1,12 @@
 package com.algorithms.steganography;
 
 import com.algorithms.steganography.exceptions.NotEnoughPictureSize;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.nio.file.Path;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 public class LSBMethodTest {
 
@@ -14,8 +14,8 @@ public class LSBMethodTest {
     private static String path;
     private static LSBMethod lsbMethod;
 
-    @BeforeAll
-    public static void init() {
+    @Before
+    public void init() {
         text = "Hello world!, Привет мир!";
         path = "src/test/resources/originPic.jpg";
         lsbMethod = LSBMethod.getInstance();

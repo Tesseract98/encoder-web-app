@@ -1,13 +1,13 @@
 package com.algorithms.cryptography;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class VernamCipherTest {
+public class VernamCipherTest {
 
     @Test
-    void encryptDecrypt() {
+    public void encryptDecrypt() {
         final String text = "Some Message!1";
         VernamCipher vernamCipher = new VernamCipher();
 
