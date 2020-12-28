@@ -4,8 +4,12 @@ import com.algorithms.util.ReadProperty;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -15,17 +19,20 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+@Slf4j
 public class HuffmanCoding {
 
     @SuppressWarnings("unused")
@@ -43,11 +50,13 @@ public class HuffmanCoding {
     private final int CHARSET_BYTES_LEN;
     private final int FIRST_CHARSET_BYTE_SHIFT;
 
+    private final Properties config;
+
     public HuffmanCoding() {
+        config = ReadProperty.getInstance().getConfigProperty();
         code = new LinkedList<>();
         table = new HashMap<>();
-        this.CHARSET_BYTES_LEN = Integer.parseInt(ReadProperty.getInstance()
-                .getConfigProperty().getProperty("char-length-bytes"));
+        this.CHARSET_BYTES_LEN = Integer.parseInt(config.getProperty("char-length-bytes"));
         this.FIRST_CHARSET_BYTE_SHIFT = CHARSET_BYTES_LEN - 1;
     }
 
@@ -81,25 +90,6 @@ public class HuffmanCoding {
         Node root = nodes.get(0);
         makeBinaryTree(root);
 
-        // TODO: think about length
-//        int c3=0, c4=0, c5=0;
-//        for(char i : table.keySet()) {
-//            switch (table.get(i).size()) {
-//                case 3:
-//                    c3++;
-//                    break;
-//                case 4:
-//                    c4++;
-//                    break;
-//                case 5:
-//                    c5++;
-//                    break;
-//            }
-//        }
-//
-//        System.out.println(c3 + " " + c4 + " " + c5);
-//        System.out.println(c3 * 3 + c4 * 4 + c5 * 5);
-
         Map<Character, String> tableCharsWithBinaryString = new HashMap<>();
         convertListTableToStringTable(tableCharsWithBinaryString);
 
@@ -111,16 +101,13 @@ public class HuffmanCoding {
         return makeEncryptedText(textInBinaryForm, charactersAndAmounts);
     }
 
-    public Path encrypt(Path pathToFile) throws IOException {
-        File file = new File(pathToFile.toString());
-        if(!file.exists()){
+    // TODO: png file decryption
+    @Deprecated
+    @SuppressWarnings("unused")
+    private Path encrypt(Path pathToFile) throws IOException {
+        if(!pathToFile.toFile().exists()){
             throw new RuntimeException();
         }
-
-//        byte[] byteFile = IOUtils.toByteArray(new BufferedInputStream(new FileInputStream(file)));
-//
-//        String symbolicFile = IOUtils
-//                .toString(new BufferedInputStream(new FileInputStream(file)), StandardCharsets.ISO_8859_1);
 
         ImagePlus imagePlus = IJ.openImage(pathToFile.toString());
         ImageProcessor imageProcessor = imagePlus.getProcessor();
@@ -133,47 +120,54 @@ public class HuffmanCoding {
             for(int j = 0; j < height; j++) {
                 char str = (char)imageProcessor.getPixel(i, j);
                 pixelConvertedChar.append(Integer.toBinaryString(str));
+//                pixelConvertedChar.append(str);
             }
         }
 
-//        IJ.createImage()
-        StringBuilder inStr = asyncCharConverter(pixelConvertedChar);
+        int[][] var = imageProcessor.getIntArray();
 
-//        StringBuilder stringBuilder = new StringBuilder();
-//        for(byte i: byteFile) {
-//            stringBuilder.append((char) i);
-//        }
+        Map<Integer, Integer> charactersAndAmounts = new HashMap<>();
 
-        String encryptedFile = encrypt(inStr.toString());
+        for(int[] i : var) {
+            for (int j : i) {
+                if (!charactersAndAmounts.containsKey(j)) {
+                    charactersAndAmounts.put(j, 0);
+                }
+                charactersAndAmounts.put(j, charactersAndAmounts.get(j) + 1);
+            }
+        }
 
-        Path newPath = Paths.get("D:\\new\\asd2.png");
-//        File file1 = new File(newPath.toString());
-//        BufferedOutputStream bfo = new BufferedOutputStream(new FileOutputStream(file1));
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(charactersAndAmounts.entrySet());
+        list.sort(Map.Entry.comparingByValue((c1, c2) -> -c1.compareTo(c2)));
 
-//        bfo.write(encryptedFile.getBytes("ISO_8859_1"));
+        Map<Integer, Integer> result = new LinkedHashMap<>();
+        for (Map.Entry<Integer, Integer> entry : list) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        System.out.println(result);
 
-//        bfo.write(encryptedFile.getBytes());
-//        bfo.write(byteFile);
+        String encryptedFile = encrypt(pixelConvertedChar.toString());
 
-//        System.out.println(encryptedFile);
-//        String iso = new String(encryptedFile.getBytes(), StandardCharsets.ISO_8859_1);
-//        System.out.println(iso);
-//        System.out.println(new String(iso.getBytes(), StandardCharsets.ISO_8859_1));
+        Path newPath = Paths.get(config.getProperty("save-file-directory") + "asd2.png");
 
-//        bfo.flush();
-//        bfo.close();
+        File file1 = new File(newPath.toString());
+        BufferedImage image = new BufferedImage(768, 480, BufferedImage.TYPE_INT_RGB);
+        Graphics graphic = image.createGraphics();
+        graphic.setColor(Color.WHITE);
+        graphic.fillRect(0, 0, 768, 480);
+        for(int i = 0, j = 0; i < 480 && (i * j + j) < encryptedFile.length(); i++) {
+            for(j = 0; j < 768 && (i * j + j) < encryptedFile.length();  j++) {
+                graphic.setColor(new Color(encryptedFile.charAt(i * j + j)));
+                graphic.fillRect(j, i, 1, 1);
+            }
+            if ((i * j + j) > encryptedFile.length()) {
+                System.out.println();
+            }
+        }
 
-        saveImage(imagePlus);
+        ImageIO.write(image, "png", file1);
 
         return newPath;
-    }
-
-    private Path saveImage(ImagePlus imagePlus) {
-        String path = String.format("%s%s", "D:\\new\\", UUID.randomUUID());
-        String type = "png";
-        Path endPath = Paths.get(String.format("%s.%s", path, type));
-        IJ.saveAs(imagePlus, type, path);
-        return endPath;
     }
 
     public String decrypt(String text) {
@@ -187,42 +181,43 @@ public class HuffmanCoding {
         makeSortedTree(lst);
 
         byte idx = 0;
-        if (Character.getNumericValue(text.charAt(indexOfMarkerChar - 1)) != -1) {
+        if (Character.getNumericValue(text.charAt(indexOfMarkerChar - 2)) != -1) {
+            idx = 3;
+        } else if (Character.getNumericValue(text.charAt(indexOfMarkerChar - 1)) != -1) {
             idx = 2;
         }
 
+        int bt = 1; // > 0
         StringBuilder vars = new StringBuilder();
         for (int i = 0; i < indexOfMarkerChar - idx; i++) {
-            int bt = 1;                           // > 0
             String letter = Integer.toUnsignedString((int) text.charAt(i) - bt, 2);
             int count = CHARSET_BYTES_LEN - letter.length();
             if (count > 0) {
-                for (int j = 0; j < count; j++) {
-                    vars.append('0');
-                }
+                vars.append("0".repeat(count));
             }
-            for (char j : letter.toCharArray()) {
-                vars.append(j);
-            }
+            vars.append(letter.toCharArray());
         }
 
-        for (int i = indexOfMarkerChar - idx; i < indexOfMarkerChar - 1; i++) {
-            String letter = Integer.toUnsignedString((int) text.charAt(i) - 1, 2);
-            int numericValue = Character.getNumericValue(text.charAt(i + 1));
+        if(idx != 0) {
+            String letter = Integer.toUnsignedString((int) text.charAt(indexOfMarkerChar - idx) - bt, 2);
+            StringBuilder numResidualBit = new StringBuilder();
+            for (int i = indexOfMarkerChar - idx + 1; i < indexOfMarkerChar; i++) {
+                numResidualBit.append(text.charAt(i));
+            }
+            int numericValue = Integer.parseInt(numResidualBit.toString());
             if (letter.length() < numericValue) {
-                for (int j = 0; j < numericValue - letter.length(); j++) {
-                    vars.append('0');
-                }
+                vars.append("0".repeat(numericValue - letter.length()));
             }
-            for (char j : letter.toCharArray()) {
-                vars.append(j);
-            }
+            vars.append(letter.toCharArray());
         }
 
         return restoreOriginalText(vars, lst);
     }
 
-    public Path decrypt(Path pathToFile) throws IOException {
+    // TODO: png file decryption
+    @Deprecated
+    @SuppressWarnings("unused")
+    private Path decrypt(Path pathToFile) throws IOException {
         File file = new File(pathToFile.toString());
         if(!file.exists()){
             throw new RuntimeException();
@@ -307,7 +302,7 @@ public class HuffmanCoding {
         int step = CHARSET_BYTES_LEN * 2;
 
         for(int from = 0, till = step, counter = 0; till <= numberOfCompleteByte; from += step, till += step, counter++) {
-            if(counter == (numberOfThreads - 1)) {
+            if(till + step > numberOfCompleteByte || counter == (numberOfThreads - 1)) {
                 till = numberOfCompleteByte;
             }
             subStringTextInBinaryForm.add(textInBinaryForm.substring(from, till));
@@ -324,7 +319,7 @@ public class HuffmanCoding {
             try {
                 encryptedText.append(future.get());
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                log.warn("Something went wrong: {} {}", e.getMessage(), e.getCause());
             }
         }
 
@@ -345,7 +340,7 @@ public class HuffmanCoding {
                     << (FIRST_CHARSET_BYTE_SHIFT - (residueBytes + count % CHARSET_BYTES_LEN));
             if ((count + 1) % CHARSET_BYTES_LEN == 0 || count == txtLen - 1) {
                 codeOfChar++;
-                char numberOfEndBits = Character.forDigit(txtLen % CHARSET_BYTES_LEN, 10);
+                String numberOfEndBits = String.valueOf(txtLen % CHARSET_BYTES_LEN);
                 encryptedText.append((char) codeOfChar);
                 encryptedText.append(numberOfEndBits);
                 codeOfChar = 0;
@@ -393,22 +388,8 @@ public class HuffmanCoding {
     }
 
     private void makeSortedTree(List<Node> lst) {
+        Collections.sort(lst);
         while (lst.size() != 1) {
-            Collections.sort(lst);
-            boolean flg = true;
-            while (flg) {
-                flg = false;
-                for (int i = 0; i < lst.size() - 1; i++) {
-                    Node current = lst.get(i);
-                    Node nextNode = lst.get(i + 1);
-                    if (current.getNumberOfOccurrences() == nextNode.getNumberOfOccurrences()) {
-                        if (current.getLetter() < nextNode.getLetter()) {
-                            Collections.swap(lst, i, i + 1);
-                            flg = true;
-                        }
-                    }
-                }
-            }
             Node leftNode = lst.remove(0);
             Node rightNode = lst.remove(0);
             Node parent = new Node(leftNode, rightNode);

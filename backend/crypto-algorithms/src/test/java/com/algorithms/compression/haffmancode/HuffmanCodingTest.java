@@ -1,32 +1,16 @@
 package com.algorithms.compression.haffmancode;
 
-import com.algorithms.steganography.LSBMethod;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertEquals;
 
 
 public class HuffmanCodingTest {
 
-    private static String text;
-    private static String path;
-    private static LSBMethod lsbMethod;
-
-    @Before
-    public void init() {
-        text = "Hello world!, Привет мир!";
-        path = "src/test/resources/originPic.jpg";
-        lsbMethod = LSBMethod.getInstance();
-    }
-
     @Test
-    public void encryptDecryptText() {
+    public void encryptDecryptText1() {
+        final String text = "Hello world!1 Привет мир!";
+
         HuffmanCoding huffmanCodding = new HuffmanCoding();
 
         String encrStr = huffmanCodding.encrypt(text);
@@ -36,15 +20,15 @@ public class HuffmanCodingTest {
     }
 
     @Test
-    @Ignore("fix some issues")
-    public void encryptDecryptFile() throws IOException {
+    public void encryptDecryptText2() {
+        final String text = "Привет 12345 Hello 67890";
+
         HuffmanCoding huffmanCodding = new HuffmanCoding();
 
-        Path encrFilePath = huffmanCodding.encrypt(Paths.get(path));
-        Path decrFilePath = huffmanCodding.decrypt(encrFilePath);
+        String encrStr = huffmanCodding.encrypt(text);
+        String decrStr = huffmanCodding.decrypt(encrStr);
 
-        System.out.println();
-//        assertEquals(text, decrStr);
+        assertEquals(text, decrStr);
     }
 
 }

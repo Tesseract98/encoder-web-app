@@ -39,7 +39,18 @@ class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node nextNode) {
-        return this.numberOfOccurrences > nextNode.getNumberOfOccurrences() ? 1 : -1;
+        if(this.numberOfOccurrences > nextNode.getNumberOfOccurrences()) {
+            return 1;
+        } else if (this.numberOfOccurrences < nextNode.getNumberOfOccurrences()){
+            return -1;
+        } else {
+            if (this.letter < nextNode.letter) {
+                return 1;
+            } else if (this.letter > nextNode.letter) {
+                return -1;
+            }
+            return 0;
+        }
     }
 
 }

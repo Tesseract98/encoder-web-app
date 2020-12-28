@@ -7,7 +7,8 @@ import java.util.concurrent.*;
 
 public class TestAsyncDataAccess {
 
-    @Ignore("Use for checking multithreading environment")
+//  Use for checking multithreading environment
+    @Ignore("execution time almost 10s")
     @Test
     public void testOnOrderingAndRaceCondition() {
         ExecutorService executorService = Executors.newFixedThreadPool(4);

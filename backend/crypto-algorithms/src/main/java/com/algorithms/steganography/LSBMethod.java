@@ -112,20 +112,15 @@ public class LSBMethod {
     }
 
     private void putEndOfTextMarker(StringBuilder result) {
-        for(int i = 0; i < AMOUNT_OF_ZEROS; i++) {
-            result.append("0");
-        }
+        result.append("0".repeat(AMOUNT_OF_ZEROS));
     }
 
     private void get16LenUnicodeSequence(StringBuilder result, String binaryStr) {
-        for(int i = binaryStr.length(); i < UNICODE_SEQUENCE_BIT; i++) {
-            result.append("0");
-        }
+        result.append("0".repeat(Math.max(0, UNICODE_SEQUENCE_BIT - binaryStr.length())));
     }
 
     private Path saveImage(ImagePlus imagePlus) {
-        String path = String.format("%s%s",
-                configProperty.getProperty("save-file-directory"), UUID.randomUUID());
+        String path = String.format("%s%s", configProperty.getProperty("save-file-directory"), UUID.randomUUID());
         String type = configProperty.getProperty("file-type");
         Path endPath = Paths.get(String.format("%s.%s", path, type));
         IJ.saveAs(imagePlus, type, path);
