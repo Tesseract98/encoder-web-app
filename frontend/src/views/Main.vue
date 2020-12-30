@@ -27,8 +27,4 @@ export default {
 </script>
 
 <style scoped>
-#welcome_div {
-    margin: 5% 20% 10% 15%;
-    width: 500;
-}
 </style>
