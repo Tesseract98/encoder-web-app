@@ -1,15 +1,27 @@
 <template>
-    <div id="welcome_div">
-        <img alt="Vue logo" src="@/assets/logo.png" />
-        <h1>Encoder project</h1>
-        <p>web pages</p>
-        <router-link to="/register">
-            <button type="button" class="btn btn-outline-info">
-                На страницу регистрации
-            </button>
-        </router-link>
-        <v-btn color="primary" @click="login()">На страницу авторизации </v-btn>
-    </div>
+    <v-container class="fill-height">
+        <v-card class="mx-auto" height="300" width="700px" shaped>
+            <v-row class="mt-15 mb-5">
+                <h1 class="mx-auto">Encoder project</h1>
+            </v-row>
+            <v-row class="mb-5">
+                <p class="mx-auto">web pages:</p>
+            </v-row>
+            <hr />
+            <v-row class="mt-5">
+                <v-col>
+                    <v-btn color="info" @click="$router.push('register')">
+                        На страницу регистрации
+                    </v-btn>
+                </v-col>
+                <v-col>
+                    <v-btn color="primary" @click="$router.push('/login')">
+                        На страницу авторизации
+                    </v-btn>
+                </v-col>
+            </v-row>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -19,9 +31,9 @@ export default {
     },
     name: "Main",
     methods: {
-        login: function () {
-            location.href = "/login";
-        },
+        // login: function () {
+        //     location.href = "/login";
+        // },
     },
 };
 </script>

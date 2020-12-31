@@ -2,7 +2,7 @@
     <!-- <v-app-bar app color="primary"> -->
 
     <div>
-        <!-- <v-navigation-drawer app v-model="sidebar" class="hidden-xl-only">
+        <v-navigation-drawer absolute temporary v-model="sidebar">
             <v-list>
                 <v-list-item-group>
                     <v-list-item
@@ -19,9 +19,9 @@
                     </v-list-item>
                 </v-list-item-group>
             </v-list>
-        </v-navigation-drawer> -->
+        </v-navigation-drawer>
 
-        <v-toolbar app color="primary">
+        <v-toolbar app color="primary" dense dark>
             <span class="hidden-sm-and-up">
                 <v-app-bar-nav-icon
                     @click="sidebar = !sidebar"
