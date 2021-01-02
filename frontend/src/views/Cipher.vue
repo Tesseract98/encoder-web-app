@@ -14,16 +14,26 @@
             <v-tab-item value="VernamCipher">
                 <VernamCipher />
             </v-tab-item>
+            <v-tab-item value="Steganography">
+                <LsbSteganography />
+            </v-tab-item>
+            <v-tab-item value="HuffmanCoding">
+                <HuffmanCoding />
+            </v-tab-item>
         </v-tabs-items>
     </v-container>
 </template>
 
 <script>
 import VernamCipher from "@/components/ciphers/VernamCipher";
+import LsbSteganography from "@/components/ciphers/LsbSteganography"
+import HuffmanCoding from "@/components/ciphers/HuffmanCoding"
 
 export default {
     components: {
         VernamCipher,
+        LsbSteganography,
+        HuffmanCoding,
     },
 
     data() {

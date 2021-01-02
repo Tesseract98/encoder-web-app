@@ -1,7 +1,7 @@
 <template>
     <v-container class="fill-height">
-        <v-card class="mx-auto" height="300" width="700px" shaped>
-            <v-row class="mt-15 mb-5">
+        <v-card class="mx-auto my-15 px-10 py-10" height="300" width="700px" shaped>
+            <v-row class="mb-5">
                 <h1 class="mx-auto">Encoder project</h1>
             </v-row>
             <v-row class="mb-5">
