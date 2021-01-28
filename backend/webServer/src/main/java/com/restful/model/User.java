@@ -1,13 +1,21 @@
 package com.restful.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
-@Entity(name = "usr")
+@Data
+@Builder
+@Entity(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id", "login", "password"})
@@ -17,69 +25,37 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(unique = true, nullable = false)
+    private String login;
+
+    @Column(nullable = false)
+    private String password;
+
     private String name;
+
     private String surname;
+
     private String patronymic;
 
-    @Column(unique = true)
-    private String login;
-    private String password;
-    private boolean active;
+    @Column(columnDefinition = "boolean default true", nullable = false)
+    private Boolean enabled;
 
-    public Long getId() {
-        return id;
-    }
+    @CreatedDate
+    private Date createdDate;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @LastModifiedDate
+    private Date lastModifiedDate;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_fk", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_fk", referencedColumnName = "id")
+    )
+    List<Role> roles;
 
 }
