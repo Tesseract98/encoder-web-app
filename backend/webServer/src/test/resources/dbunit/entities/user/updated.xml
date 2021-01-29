@@ -1,0 +1,18 @@
+<dataset>
+
+    <role id="1" name="ROLE_USER"/>
+    <role id="2" name="ROLE_ADMIN"/>
+
+    <users id="55" email="admin@google.com" login="new_login"
+           password="$2y$12$fS/mfKBWHXfIwX4waePxyumKKzj7dzhnPV4VEky2uCyQMzwH4pN0S"
+           name="Вася" surname="Василенко" patronymic="Васильевич"/>
+
+    <users id="56" email="user@yandex.ru" login="user"
+           password="$2y$12$fS/$2y$12$pJP/CvBHIT8K23nvh9SC0OpwK7d5cPsmQPPCLogLVzdm2LOip0nwG"
+           name="Марк" surname="Балашов" patronymic="Вадимович"/>
+
+    <users_roles user_fk="56" role_fk="1"/>
+    <users_roles user_fk="55" role_fk="1"/>
+    <users_roles user_fk="55" role_fk="2"/>
+
+</dataset>

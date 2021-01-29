@@ -1,0 +1,13 @@
+<dataset>
+
+    <role id="1" name="ROLE_USER"/>
+    <role id="2" name="ROLE_ADMIN"/>
+
+    <users id="55" email="admin@google.com" login="admin"
+           password="$2y$12$fS/mfKBWHXfIwX4waePxyumKKzj7dzhnPV4VEky2uCyQMzwH4pN0S"
+           name="Вася" surname="Василенко" patronymic="Васильевич"/>
+
+    <users_roles user_fk="55" role_fk="1"/>
+    <users_roles user_fk="55" role_fk="2"/>
+
+</dataset>
