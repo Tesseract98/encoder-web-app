@@ -9,13 +9,27 @@ import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 
 @Data
 @Builder
-@Entity(name = "users")
+@Entity
+@Table(
+        name = "users",
+        indexes = {@Index(columnList = "login", name = "login_idx")}
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = {"id", "login", "password"})
@@ -41,7 +55,7 @@ public class User {
 
     private String patronymic;
 
-    @Column(columnDefinition = "boolean default true", nullable = false)
+    @Column(columnDefinition = "bit default true", nullable = false)
     private Boolean enabled;
 
     @CreatedDate

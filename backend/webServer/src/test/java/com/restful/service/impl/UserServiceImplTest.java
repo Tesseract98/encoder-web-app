@@ -1,5 +1,6 @@
 package com.restful.service.impl;
 
+import com.restful.controller.AuthorizationController;
 import com.restful.exceptions.service.NoSuchUserException;
 import com.restful.model.Privilege;
 import com.restful.model.Role;
@@ -13,7 +14,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.StopWatch;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -29,6 +32,9 @@ public class UserServiceImplTest extends DBUnitConfig {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private AuthorizationController authorizationController;
 
     private final String[] ignoreCols = {
             "id", "password", "created_date", "last_modified_date", "enabled"
@@ -61,7 +67,7 @@ public class UserServiceImplTest extends DBUnitConfig {
         );
         User user = User.builder()
                 .id(77L)
-                .email("new@google.com")
+                .email("new@ssss.com")
                 .login("created")
                 .password("created")
                 .name("Иван")
@@ -71,10 +77,28 @@ public class UserServiceImplTest extends DBUnitConfig {
                 .enabled(true)
                 .build();
 
-        userService.create(user);
+//        userService.create(user);
 
-        IDataSet expectedData = getIDataSetFromXml(xmlUserPath + "created.xml");
-        checkTable(expectedData, "users", true);
+        StopWatch watch = new StopWatch();
+
+        watch.start();
+        authorizationController.addUser(user);
+        watch.stop();
+
+
+//        Thread thread1 = new Thread(() -> authorizationController.addUser(user));
+////        user.setId(12L);
+//        Thread thread2 = new Thread(() -> authorizationController.addUser(user));
+//
+//        thread1.start();
+//        thread2.start();
+//
+//        thread1.join();
+//        thread2.join();
+
+        System.out.println();
+//        IDataSet expectedData = getIDataSetFromXml(xmlUserPath + "created.xml");
+//        checkTable(expectedData, "users", true);
     }
 
     @Test
